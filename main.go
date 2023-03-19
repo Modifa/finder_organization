@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	router "github.com/Modifa/finder_organization.git/routes"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -26,4 +28,37 @@ func setupRouter() *gin.Engine {
 	router.Init(r)
 
 	return r
+}
+
+func setupConfigs() {
+	//NGrok For Testing Purposes
+	os.Setenv("CURRENTDOMAIN", "https://234f-102-32-174-11.in.ngrok.io")
+
+	//Reddis Details
+	os.Setenv("REDISSERVER_HOST", "redis-19714.c124.us-central1-1.gce.cloud.redislabs.com")
+	os.Setenv("REDISSERVER_PORT", "19714")
+	os.Setenv("REDISSERVER_PASSWORD", "ULXGpAVRYk1G9tBxi9D4jkksGQLA7A9Q")
+
+	//Postgres Connection String
+	// os.Setenv("PostgresConString", "postgres://cogjgedlgavael:cf43a86f559ebdd296331ca10991a0bfc87dfcf1fb7c83d3407698719348a669@ec2-18-204-74-74.compute-1.amazonaws.com:5432/d7jnruc4m8g23q")
+	os.Setenv("PostgresConString", "postgres://fvjsnfwc:1BB4AyUDJFQSifSXiLjdBfSIotNIgoUr@raja.db.elephantsql.com/fvjsnfwc")
+	os.Setenv("WEBSERVER_PORT", "8080")
+
+}
+
+func main() {
+	//Uncommented When Not Debugging
+	// gin.SetMode(gin.ReleaseMode)
+	// export GIN_MODE=release
+
+	// gocron.Start()
+	// s := gocron.NewScheduler()
+	// gocron.Every(2).Seconds().Do(c.CheckNewUser)
+	//  <-s.Start()
+
+	r := setupRouter()
+
+	setupConfigs()
+
+	r.Run(":" + os.Getenv("WEBSERVER_PORT"))
 }
